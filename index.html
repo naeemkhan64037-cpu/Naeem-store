@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Naeem Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #f4f4f4;
+    }
+    header {
+      background: #ff6600;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 20px;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 10px;
+    }
+    .product {
+      background: white;
+      width: 160px;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+      text-align: center;
+    }
+    .product img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    button {
+      background: #ff6600;
+      border: none;
+      padding: 6px;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+    .cart, .form-section {
+      background: white;
+      margin: 15px;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 6px;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+
+<header>🛒 Naeem Online Store</header>
+
+<div class="container">
+
+  <div class="product">
+    <img src="https://via.placeholder.com/150">
+    <h4>T-Shirt</h4>
+    <p>₹500</p>
+    <button onclick="addToCart('T-Shirt',500)">Add</button>
+  </div>
+
+  <div class="product">
+    <img src="https://via.placeholder.com/150">
+    <h4>Shoes</h4>
+    <p>₹1200</p>
+    <button onclick="addToCart('Shoes',1200)">Add</button>
+  </div>
+
+</div>
+
+<div class="cart">
+  <h3>🛒 Cart</h3>
+  <div id="cartItems">Cart is empty</div>
+  <h4>Total: ₹<span id="total">0</span></h4>
+  <button onclick="clearCart()">Clear Cart</button>
+</div>
+
+<div class="form-section">
+  <h3>📦 Delivery Details</h3>
+  <input type="text" id="name" placeholder="Full Name">
+  <input type="text" id="phone" placeholder="Phone Number">
+  <textarea id="address" placeholder="Full Address"></textarea>
+  <button onclick="orderWhatsApp()">Order on WhatsApp</button>
+  <button onclick="fakePayment()">Pay Online</button>
+</div>
+
+<script>
+  let cart = [];
+  let total = 0;
+
+  function addToCart(name, price) {
+    cart.push({name:name, price:price});
+    total += price;
+    displayCart();
+  }
+
+  function displayCart() {
+    let output = "";
+    cart.forEach((item, index) => {
+      output += item.name + " - ₹" + item.price +
+      " <button onclick='removeItem(" + index + ")'>X</button><br>";
+    });
+    document.getElementById("cartItems").innerHTML = output || "Cart is empty";
+    document.getElementById("total").innerText = total;
+  }
+
+  function removeItem(index) {
+    total -= cart[index].price;
+    cart.splice(index,1);
+    displayCart();
+  }
+
+  function clearCart() {
+    cart = [];
+    total = 0;
+    displayCart();
+  }
+
+  function orderWhatsApp() {
+    let name = document.getElementById("name").value;
+    let phone = document.getElementById("phone").value;
+    let address = document.getElementById("address").value;
+
+    if(cart.length === 0){
+      alert("Cart is empty!");
+      return;
+    }
+
+    let message = "Order Details:\n";
+    cart.forEach(item => {
+      message += item.name + " - ₹" + item.price + "\n";
+    });
+
+    message += "\nTotal: ₹" + total;
+    message += "\n\nCustomer Name: " + name;
+    message += "\nPhone: " + phone;
+    message += "\nAddress: " + address;
+
+    let phoneNumber = "917045006998"; // Apna number daale
+    let url = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(message);
+
+    window.open(url, "_blank");
+  }
+
+  function fakePayment() {
+    alert("Payment Successful! (Demo Only)");
+  }
+</script>
+
+</body>
+</html>
